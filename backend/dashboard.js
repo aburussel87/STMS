@@ -5,11 +5,14 @@ require('dotenv').config();
 
 const router = express.Router();
 const client = new Client({
-  host:  process.env.PGHOST || 'localhost', 
-  port: process.env.PGPORT || 5432,       
-  user: process.env.PGUSER,      
-  password: process.env.PGPASSWORD , 
-  database: process.env.PGDATABASE, 
+  host: process.env.PGHOST || 'localhost',  // Host address of the database (Railway or localhost)
+  port: process.env.PGPORT || 5432,        // Default PostgreSQL port (usually 5432)
+  user: process.env.PGUSER,                // Your PostgreSQL username (set in .env)
+  password: process.env.PGPASSWORD,        // Your PostgreSQL password (set in .env)
+  database: process.env.PGDATABASE,        // Your PostgreSQL database name (set in .env)
+  ssl: {
+    rejectUnauthorized: false,  // Required for Railway PostgreSQL (SSL)
+  },
 });
 
 client.connect();
