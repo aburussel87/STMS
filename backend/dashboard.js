@@ -1,0 +1,50 @@
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const { Client } = require('pg');
+require('dotenv').config();
+
+const router = express.Router();
+const client = new Client({
+  host:  process.env.DB_HOST || 'localhost', 
+  port: process.env.DB_PORT || 5432,       
+  user: process.env.DB_USER,      
+  password: process.env.DB_PASSWORD , 
+  database: process.env.DB_NAME, 
+});
+
+client.connect();
+
+// Middleware to verify JWT
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, 'secretKey', (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
+// Dashboard route
+router.get('/api/dashboard', authenticateToken, async (req, res) => {
+  try {
+    const result = await client.query('SELECT * FROM student WHERE uid = $1', [req.user.userId]);
+
+    if (result.rows.length === 0) return res.status(404).json({ error: 'User not found' });
+
+    const user = result.rows[0];
+    res.json({
+      name: "Abu Russel",
+      email: "aburussel87@gmail.com",
+      uid: user.uid,
+    });
+  } catch (err) {
+    console.error('Dashboard error:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+module.exports = router;
