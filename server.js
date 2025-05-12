@@ -1,5 +1,5 @@
-const express = require('express');
 require('dotenv').config(); 
+const express = require('express'); 
 const path = require('path');
 const { authenticateUser } = require('./backend/login'); 
 const dashboardRouter = require('./backend/dashboard'); 
