@@ -1,15 +1,16 @@
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const { Client } = require('pg');
+require('dotenv').config();
 
 // PostgreSQL client setup
 const client = new Client({
-    host: 'localhost',  // or the host of your database
-    port: 5432,
-    user: 'system',  // replace with your actual database user
-    password: 'Russel87',  // replace with your actual database password
-    database: 'postgres',  // replace with your actual database name
-});
+    host:  process.env.PGHOST || 'localhost', 
+    port: process.env.PGPORT || 5432,       
+    user: process.env.PGUSER,      
+    password: process.env.PGPASSWORD , 
+    database: process.env.PGDATABASE, 
+  });
 
 // Connect to the PostgreSQL database
 client.connect();

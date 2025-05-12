@@ -5,11 +5,11 @@ require('dotenv').config();
 
 const router = express.Router();
 const client = new Client({
-  host:  process.env.DB_HOST || 'localhost', 
-  port: process.env.DB_PORT || 5432,       
-  user: process.env.DB_USER,      
-  password: process.env.DB_PASSWORD , 
-  database: process.env.DB_NAME, 
+  host:  process.env.PGHOST || 'localhost', 
+  port: process.env.PGPORT || 5432,       
+  user: process.env.PGUSER,      
+  password: process.env.PGPASSWORD , 
+  database: process.env.PGDATABASE, 
 });
 
 client.connect();
