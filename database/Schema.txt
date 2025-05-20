@@ -1,0 +1,262 @@
+
+CREATE TYPE AdminStatus AS ENUM ('Current', 'Retired');
+CREATE TYPE Gender AS ENUM ('Male', 'Female', 'Other');
+CREATE TYPE ExamType AS ENUM ('Term', 'Quiz','CT1','CT2','CT3','CT4');
+CREATE TYPE AttendanceStatus AS ENUM ('Present', 'Absent', 'Late', 'Excused');
+CREATE TYPE RoomType AS ENUM ('Classroom', 'Laboratory', 'Auditorium', 'Office');
+CREATE TYPE FeeStatus AS ENUM ('Paid', 'Unpaid', 'Partial');
+CREATE TYPE Semester AS ENUM ('L1T1', 'L1T2', 'L2T1', 'L2T2', 'L3T1', 'L3T2', 'L4T1', 'L4T2');
+CREATE TYPE AssignmentType AS ENUM ('Permanent', 'Temporary');
+CREATE TYPE UserRole AS ENUM ('Student', 'Teacher', 'Admin');
+CREATE TYPE SectionType AS ENUM ('A1','A2','B1','B2','C1','C2');
+
+CREATE TABLE UniversityConfig (
+  id SERIAL PRIMARY KEY,
+  current_semester Semester,
+  current_academic_session VARCHAR(8)
+);
+
+CREATE TABLE User (
+  user_id VARCHAR(10) PRIMARY KEY,
+  username VARCHAR(10),
+  password_hash VARCHAR(10),
+  email VARCHAR(20),
+  phone VARCHAR(11),
+  dob DATE,
+  gender Gender,
+  role UserRole,
+  date_joined TIMESTAMP,
+  is_active BOOLEAN,
+  admin_id VARCHAR(10)
+);
+
+CREATE TABLE Admin (
+  admin_id VARCHAR(10) PRIMARY KEY,
+  user_id VARCHAR(10) UNIQUE NOT NULL,
+  assigned_date TIMESTAMP,
+  status AdminStatus,
+  CONSTRAINT fk_admin_user FOREIGN KEY(user_id) REFERENCES User(user_id)
+);
+
+CREATE TABLE Department (
+  department_id INT PRIMARY KEY,
+  name VARCHAR(10),
+  student INT
+);
+
+CREATE TABLE head_of_department(
+  teacher_id VARCHAR(10),
+  department_id INT,
+  assigned_on DATE,
+  resigned_on DATE,
+  PRIMARY KEY (teacher_id, department_id),
+  CONSTRAINT fk_hod_teacher FOREIGN KEY (teacher_id) REFERENCES Teacher(teacher_id),
+  CONSTRAINT fk_hod_department FOREIGN KEY (department_id) REFERENCES Department(department_id)
+);
+
+CREATE TABLE Teacher (
+  teacher_id VARCHAR(10) PRIMARY KEY,
+  hire_date DATE,
+  designation VARCHAR(20),
+  department_id INT NOT NULL,
+  CONSTRAINT fk_teacher_department FOREIGN KEY (department_id) REFERENCES Department(department_id)
+);
+
+CREATE TABLE Advisor (
+  advisor_id VARCHAR(10) PRIMARY KEY,
+  total_student INT
+);
+
+CREATE TABLE Hall (
+  hall_id VARCHAR(10) PRIMARY KEY,
+  name VARCHAR(30),
+  capacity INT,
+  location VARCHAR(40)
+);
+
+CREATE TABLE Student (
+  student_id VARCHAR(10) PRIMARY KEY,
+  department_id INT,
+  academic_session VARCHAR(8),
+  current_semester Semester,
+  hall_id VARCHAR(10),
+  advisor_id VARCHAR(10),
+  CONSTRAINT fk_student_department FOREIGN KEY (department_id) REFERENCES Department(department_id),
+  CONSTRAINT fk_student_hall FOREIGN KEY (hall_id) REFERENCES Hall(hall_id),
+  CONSTRAINT fk_student_advisor FOREIGN KEY (advisor_id) REFERENCES Advisor(advisor_id)
+);
+
+CREATE TABLE GradeSheet (
+  student_id VARCHAR(10) PRIMARY KEY,
+  total_credit FLOAT,
+  cgpa FLOAT,
+  remark TEXT,
+  CONSTRAINT fk_gradesheet_student FOREIGN KEY (student_id) REFERENCES Student(student_id)
+);
+
+CREATE TABLE Course (
+  course_id VARCHAR(10) PRIMARY KEY,
+  title VARCHAR(20),
+  credit_hours FLOAT,
+  semester Semester,
+  offered_by INT NOT NULL,
+  department_id INT NOT NULL,
+  pre_requisite VARCHAR(10),
+  still_offered BOOLEAN,
+  CONSTRAINT fk_course_offered_by FOREIGN KEY (offered_by) REFERENCES Department(department_id),
+  CONSTRAINT fk_course_department FOREIGN KEY (department_id) REFERENCES Department(department_id)
+);
+
+CREATE TABLE Room (
+  room_id VARCHAR(10) PRIMARY KEY,
+  building_name VARCHAR(20),
+  capacity INT,
+  room_type RoomType
+);
+
+CREATE TABLE Enrollment (
+  student_id VARCHAR(10) NOT NULL,
+  course_id VARCHAR(10) NOT NULL,
+  semester Semester,
+  enrolled_on DATE,
+  approved_by VARCHAR(10),
+  section_type SectionType,
+  PRIMARY KEY (student_id, course_id, semester),
+  CONSTRAINT fk_enrollment_student FOREIGN KEY (student_id) REFERENCES Student(student_id),
+  CONSTRAINT fk_enrollment_course FOREIGN KEY (course_id) REFERENCES Course(course_id)
+);
+
+CREATE TABLE Exam (
+  exam_id VARCHAR(10) PRIMARY KEY,
+  course_id VARCHAR(10) NOT NULL,
+  teacher_id VARCHAR(10),
+  title VARCHAR(20),
+  exam_type ExamType,
+  total_marks INT,
+  date_of_exam TIMESTAMP,
+  semester Semester,
+  academic_session VARCHAR(8),
+  CONSTRAINT fk_exam_course FOREIGN KEY (course_id) REFERENCES Course(course_id),
+  CONSTRAINT fk_exam_teacher FOREIGN KEY (teacher_id) REFERENCES Teacher(teacher_id)
+);
+
+CREATE TABLE ExamResult (
+  result_id VARCHAR(10) PRIMARY KEY,
+  exam_id VARCHAR(10) NOT NULL,
+  student_id VARCHAR(10),
+  marks_obtained INT,
+  remarks TEXT,
+  CONSTRAINT fk_examresult_exam FOREIGN KEY (exam_id) REFERENCES Exam(exam_id),
+  CONSTRAINT fk_examresult_student FOREIGN KEY (student_id) REFERENCES Student(student_id)
+);
+
+CREATE TABLE Attendance (
+  student_id VARCHAR(10) NOT NULL,
+  course_id VARCHAR(10) NOT NULL,
+  date TIMESTAMP,
+  status AttendanceStatus,
+  UNIQUE (student_id, course_id, date),
+  CONSTRAINT fk_attendance_student FOREIGN KEY (student_id) REFERENCES Student(student_id),
+  CONSTRAINT fk_attendance_course FOREIGN KEY (course_id) REFERENCES Course(course_id)
+);
+
+CREATE TABLE ClassSchedule (
+  schedule_id VARCHAR(10) PRIMARY KEY,
+  course_id VARCHAR(10) NOT NULL,
+  section_type SectionType,
+  room_id VARCHAR(10),
+  day_of_week VARCHAR(10),
+  start_time TIME,
+  end_time TIME,
+  semester Semester,
+  academic_session VARCHAR(8),
+  CONSTRAINT fk_classschedule_course FOREIGN KEY (course_id) REFERENCES Course(course_id),
+  CONSTRAINT fk_classschedule_room FOREIGN KEY (room_id) REFERENCES Room(room_id)
+);
+
+CREATE TABLE SubjectAllocation (
+  teacher_id VARCHAR(10) NOT NULL,
+  course_id VARCHAR(10) NOT NULL,
+  section_type SectionType,
+  academic_session VARCHAR(8),
+  CONSTRAINT fk_subjectallocation_teacher FOREIGN KEY (teacher_id) REFERENCES Teacher(teacher_id),
+  CONSTRAINT fk_subjectallocation_course FOREIGN KEY (course_id) REFERENCES Course(course_id)
+);
+
+CREATE TABLE HallAssignment (
+  student_id VARCHAR(10) NOT NULL PRIMARY KEY,
+  hall_id VARCHAR(10) NOT NULL,
+  room_number VARCHAR(10),
+  assignment_type AssignmentType,
+  assigned_on TIMESTAMP,
+  vacated_on TIMESTAMP,
+  CONSTRAINT fk_hallassignment_student FOREIGN KEY (student_id) REFERENCES Student(student_id),
+  CONSTRAINT fk_hallassignment_hall FOREIGN KEY (hall_id) REFERENCES Hall(hall_id)
+);
+
+CREATE TABLE Provost (
+  teacher_id VARCHAR(10),
+  hall_id VARCHAR(10) NOT NULL,
+  assigned_on DATE,
+  resigned_on DATE,
+  PRIMARY KEY(teacher_id, hall_id),
+  CONSTRAINT fk_provost_teacher FOREIGN KEY (teacher_id) REFERENCES Teacher(teacher_id),
+  CONSTRAINT fk_provost_hall FOREIGN KEY (hall_id) REFERENCES Hall(hall_id)
+);
+
+CREATE TABLE StudentFee (
+  student_fee_id VARCHAR(10) PRIMARY KEY,
+  student_id VARCHAR(10) NOT NULL,
+  fee_type_id VARCHAR(10),
+  amount INT,
+  due_date TIMESTAMP,
+  status FeeStatus,
+  paid_on TIMESTAMP,
+  CONSTRAINT fk_studentfee_student FOREIGN KEY (student_id) REFERENCES Student(student_id),
+  CONSTRAINT fk_studentfee_feetype FOREIGN KEY (fee_type_id) REFERENCES FeeType(fee_type_id)
+);
+
+CREATE TABLE FeeType (
+  fee_type_id VARCHAR(10) PRIMARY KEY,
+  name VARCHAR(30),
+  description TEXT
+);
+
+CREATE TABLE Notice (
+  notice_id VARCHAR(10) PRIMARY KEY,
+  title VARCHAR(30),
+  message TEXT,
+  created_for VARCHAR(10) NOT NULL,
+  created_by VARCHAR(10) NOT NULL,
+  created_at TIMESTAMP,
+  role UserRole
+);
+
+CREATE TABLE Feedback (
+  feedback_id VARCHAR(10) PRIMARY KEY,
+  student_id VARCHAR(10) NOT NULL,
+  course_id VARCHAR(10) NOT NULL,
+  rating INT,
+  comments TEXT,
+  submitted TIMESTAMP,
+  CONSTRAINT fk_feedback_student FOREIGN KEY (student_id) REFERENCES Student(student_id),
+  CONSTRAINT fk_feedback_course FOREIGN KEY (course_id) REFERENCES Course(course_id)
+);
+
+CREATE TABLE EmergencyContact (
+  emergency_id VARCHAR(10) PRIMARY KEY,
+  user_id VARCHAR(10) UNIQUE NOT NULL,
+  name VARCHAR(30),
+  mobile VARCHAR(12),
+  address VARCHAR(30),
+  CONSTRAINT fk_emergency_user FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
+
+CREATE TABLE Address (
+  address_id VARCHAR(10) PRIMARY KEY,
+  user_id VARCHAR(10) UNIQUE NOT NULL,
+  country VARCHAR(20),
+  city VARCHAR(20),
+  street VARCHAR(20),
+  CONSTRAINT fk_address_user FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
