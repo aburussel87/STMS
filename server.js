@@ -3,14 +3,13 @@ const express = require('express');
 const path = require('path');
 const { authenticateUser } = require('./backend/login'); 
 const dashboardRouter = require('./backend/dashboard'); 
-
+const chatRouter = require('./backend/chat')
 
 const app = express();
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 5000; 
 
-// Use built-in middleware for parsing JSON requests
-app.use(express.json()); // For parsing JSON bodies
-app.use(express.urlencoded({ extended: true })); // For parsing URL-encoded bodies
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
 
 
 // Serve static files from the "assets" folder
@@ -20,9 +19,9 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// Login route - Handle POST request to /login
+
 app.post('/login', async (req, res) => {
-  console.log(req.body);  // Check the request body
+  console.log(req.body);  
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -30,17 +29,17 @@ app.post('/login', async (req, res) => {
   }
 
   try {
-    const { token } = await authenticateUser(username, password); // Call backend authentication
-    res.json({ token });  // Send back JWT token if login is successful
+    const { token } = await authenticateUser(username, password); 
+    res.json({ token });  
   } catch (error) {
     res.status(400).json({ error: error.error || error.message });
   }
 });
 
-// Serve index.html as the root of the website
+
 app.get('/', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'index.html');
-  console.log("Looking for file at:", filePath);  // Log the file path
+  console.log("Looking for file at:", filePath);  
 
   res.sendFile(filePath, (err) => {
     if (err) {
@@ -50,9 +49,12 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use(dashboardRouter); // Use the dashboard router for API routes
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://192.168.0.175:${PORT}`);
+//router
+app.use(dashboardRouter);
+app.use(chatRouter);
+
+
+app.listen(PORT, '0.0.0.0',() => {
+  console.log(`Server is running on http://192.168.0.179:5000`);
 });

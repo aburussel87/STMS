@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edubot</title>
+  <link rel="icon" type="image/png" href="../public/images/logo.png" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="Header.css">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../public/css/chat.css">
+</head>
+
+<body>
+  <header>
+    <!-- Transparent Hamburger -->
+    <button class="btn border-0 bg-transparent me-3 hamburger-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+      ☰
+    </button>
+
+    <!-- Sidebar Offcanvas -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <a class="btn btn-outline-primary w-100 mb-2" href="dashboard.html">Dashboard</a>
+        <a class="btn btn-outline-danger w-100" href="index.html">Logout</a>
+      </div>
+    </div>
+
+    <!-- Logo -->
+    <div class="header-logo">
+      <img src="../public/images/logo.png" alt="Institution Logo" />
+    </div>
+
+    <!-- Institution Info -->
+    <div class="header-info">
+      <div class="institution-name">Institutional Information System</div>
+      <div class="institution-location">Dublagari, Sherpur, Bogura, Bangladesh</div>
+    </div>
+
+    <!-- Notification Icon -->
+    <div class="header-notification">
+      <i class="fas fa-bell"></i>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="header-search">
+      <input type="text" placeholder="Search..." />
+    </div>
+  </header>
+  <main>
+    <!-- Main Content -->
+  <!-- Logo at top left -->
+  <div class="logo-container">
+    <img src="../public/images/logo.png" alt="RSF Logo" class="logo">
+  </div>
+
+  <div class="chat-container">
+    <div id="chatbox" class="chat-box" style="padding: 10px; overflow-y: auto; margin-bottom: 15vh; max-height: calc(100vh - 0vh);"></div>
+    <div class="input-area" style="position: fixed; bottom: 0; width: 100%; background-color: #1212127a; padding: 10px; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);">
+      <input type="text" id="userInput" placeholder="Ask something..." style="width: 80%; padding: 10px; border: none; border-radius: 5px; margin-right: 10px;" />
+      <button onclick="sendMessageAi()" style="padding: 10px 20px; border: none; border-radius: 20px; background-color: #002042; color: white;">Send</button>
+    </div>
+  </div>
+  
+
+  <script type="module" src="../public/js/chat.js"></script>
+  </main>
+</body>
+
+</html>
