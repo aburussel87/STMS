@@ -58,16 +58,19 @@ function generateRandomPassword(length) {
 
 function saveToDatabase(userId, hashedPassword) {
     const query = {
-        text: 'INSERT INTO student(uid,password) VALUES($1, $2)',
-        values: [userId,hashedPassword],
+        text: 'INSERT INTO "User" (user_id, password_hash, role) VALUES ($1, $2, $3)',
+        values: [userId, hashedPassword, 'Student'],
     };
 
     client.query(query, (err, res) => {
         if (err) {
-            console.error('Error inserting into the database', err);
+            console.error('Error inserting into user table', err);
+        } else {
+            console.log('User inserted successfully');
         }
     });
 }
+
 
 function saveToCsv(data, filename = 'credentials.csv') {
     const header = ['ID', 'Raw Password', 'Hashed Password'];

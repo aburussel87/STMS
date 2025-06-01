@@ -49,14 +49,30 @@
       <div class="institution-location">Dublagari, Sherpur, Bogura, Bangladesh</div>
     </div>
 
-    <!-- Notification Icon -->
-    <div class="header-notification">
-      <i class="fas fa-bell"></i>
-    </div>
+    <!-- Notification + Search -->
+    <div class="d-flex align-items-center gap-3">
 
-    <!-- Search Bar -->
-    <div class="header-search">
-      <input type="text" placeholder="Search..." />
+      <!-- Notification Bell -->
+      <div class="position-relative" id="notificationContainer">
+        <i class="fas fa-bell fs-4" id="notificationBell" style="cursor: pointer;"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+          id="notificationCount">
+          3
+        </span>
+
+        <!-- Notification Popup -->
+        <div id="notificationPopup" class="position-absolute bg-white shadow rounded p-2"
+          style="top: 30px; right: 0; width: 300px; max-height: 200px; overflow-y: auto; display: none; z-index: 1050; color: black;">
+          <div class="fw-bold mb-2">Notifications</div>
+          <div id="notificationList"></div>
+        </div>
+
+      </div>
+
+      <!-- Search -->
+      <div class="header-search d-none d-md-block">
+        <input type="text" class="form-control" placeholder="Search..." />
+      </div>
     </div>
   </header>
   <main>
@@ -76,6 +92,7 @@
   
 
   <script type="module" src="../public/js/chat.js"></script>
+  <script src="../public/js/notification.js"></script>
   </main>
 </body>
 
