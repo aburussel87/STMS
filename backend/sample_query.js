@@ -1,12 +1,11 @@
 const { Pool } = require('pg');
 
-// Configure your DB connection
 const pool = new Pool({
   user: 'system',
-  host: 'localhost', // or your IP
+  host: 'localhost', 
   database: 'postgres',
   password: 'Russel87',
-  port: 5432, // default PostgreSQL port
+  port: 5432, 
 });
 
 pool.query('SELECT * FROM "User"', (err, res) => {
@@ -19,5 +18,5 @@ pool.query('SELECT * FROM "User"', (err, res) => {
         console.log(`User ID: ${row.user_id}, Name: ${row.username}`);
       });
     }
-    pool.end(); // Close the connection
+    pool.end(); 
   });

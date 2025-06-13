@@ -1,3 +1,39 @@
+import {CONFIG} from '../js/config.js';
+
+window.onload = async function () {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    alert('You are not logged in!');
+    window.location.href = '/index.html';
+    return;
+  }
+
+  try {
+    const response = await fetch(`${CONFIG.BASE_URL}/api/dashboard`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const user = data.user;
+      console.log(user);
+    } else {
+      const error = await response.json();
+      alert('Failed to load dashboard: ' + (error.error || 'Unknown error'));
+      window.location.href = '/index.html';
+    }
+
+  } catch (err) {
+    console.error('Error fetching dashboard:', err);
+    alert('Something went wrong.');
+    window.location.href = '/index.html';
+  }
+};
+
 // loginChart.js
  
 let loginChart;

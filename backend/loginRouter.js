@@ -38,7 +38,7 @@ const authenticateUser = async (username, password) => {
     }
 
     const token = jwt.sign(
-      { userId: user.uid }, 
+      { userId: user.user_id }, 
       process.env.JWT_SECRET, 
       { expiresIn: process.env.JWT_EXPIRATION }    
     );

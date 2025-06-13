@@ -22,7 +22,6 @@ async function login(e) {
     if (response.ok) {
       const data = await response.json();
       const token = data.token;
-      alert('Login successful!');
       localStorage.setItem('token', token);
       window.location.href = '/dashboard.html';  
     } else {

@@ -14,7 +14,7 @@ async function sendMessageAi() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("token")  // ✅ Add this line
+        "Authorization": "Bearer " + localStorage.getItem("token")  
       },
       body: JSON.stringify({ message })
     });

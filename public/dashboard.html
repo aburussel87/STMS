@@ -14,60 +14,6 @@
 
 <body>
   <header>
-    <!-- Transparent Hamburger -->
-    <button class="btn border-0 bg-transparent me-3 hamburger-btn" type="button" data-bs-toggle="offcanvas"
-      data-bs-target="#sidebar" aria-controls="sidebar">
-      ☰
-    </button>
-
-    <!-- Sidebar Offcanvas -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <a class="btn btn-outline-primary w-100 mb-2" href="chat.html">Edu Bot</a>
-        <a class="btn btn-outline-danger w-100" href="index.html">Logout</a>
-      </div>
-    </div>
-
-    <!-- Logo -->
-    <div class="header-logo">
-      <img src="../public/images/logo.png" alt="Institution Logo" />
-    </div>
-
-    <!-- Institution Info -->
-    <div class="header-info">
-      <div class="institution-name">Institutional Information System</div>
-      <div class="institution-location">Dublagari, Sherpur, Bogura, Bangladesh</div>
-    </div>
-
-   <!-- Notification + Search -->
-    <div class="d-flex align-items-center gap-3">
-
-      <!-- Notification Bell -->
-      <div class="position-relative" id="notificationContainer">
-        <i class="fas fa-bell fs-4" id="notificationBell" style="cursor: pointer;"></i>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-          id="notificationCount">
-          3
-        </span>
-
-        <!-- Notification Popup -->
-        <div id="notificationPopup" class="position-absolute bg-white shadow rounded p-2"
-          style="top: 30px; right: 0; width: 300px; max-height: 200px; overflow-y: auto; display: none; z-index: 1050; color: black;">
-          <div class="fw-bold mb-2">Notifications</div>
-          <div id="notificationList"></div>
-        </div>
-
-      </div>
-
-      <!-- Search -->
-      <div class="header-search d-none d-md-block">
-        <input type="text" class="form-control" placeholder="Search..." />
-      </div>
-    </div>
   </header>
 
   <main>
@@ -110,8 +56,8 @@
       </div>
 
     </div>
-    <script src="../public/js/dashboard.js"></script>
-    <script src="../public/js/notification.js"></script>
+    <script type="module" src="../public/js/dashboard.js"></script>
+    <script src="../public/js/header_loader.js"></script>
   </main>
 </body>
 

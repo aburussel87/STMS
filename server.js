@@ -1,9 +1,9 @@
 require('dotenv').config(); 
 const express = require('express'); 
 const path = require('path');
-const { authenticateUser } = require('./backend/login'); 
-const dashboardRouter = require('./backend/dashboard'); 
-const chatRouter = require('./backend/chat')
+const { authenticateUser } = require('./backend/loginRouter'); 
+const dashboardRouter = require('./backend/dashboardRouter'); 
+const chatRouter = require('./backend/chatRouter')
 
 const app = express();
 const PORT = process.env.PORT || 5000; 
@@ -12,10 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
 
-// Serve static files from the "assets" folder
 app.use('/public', express.static(path.join(__dirname, 'public')));
-
-// Serve static files from the "frontend" folder (including index.html)
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -56,5 +53,5 @@ app.use(chatRouter);
 
 
 app.listen(PORT, '0.0.0.0',() => {
-  console.log(`Server is running on http://192.168.0.109:5000`);
+  console.log(`Server is running on http://192.168.0.105:5000`);
 });
