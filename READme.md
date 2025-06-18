@@ -108,13 +108,13 @@ app.listen(PORT, '0.0.0.0',() => {
 });
 
 ```
-.
+```
 ├── public
 │   ├── chat.html                        
 │   ├── css                              
 │   ├── js 
-│       ├──config.js.      // place your ip adress here too
----
+│       ├──config.js.      <!--place your ip adress here too-->
+```
 
 ## ⚙️ Features
 
