@@ -100,6 +100,20 @@ When creating a new frontend HTML page (e.g., `profile.html`), use the following
 
 The `header_loader.js` script automatically fetches and inserts the contents of `header.html` into the `<header>` element, maintaining consistency across all pages.
 
+## Deployment under same WIFI
+- place your ip address and port here inside server.js
+```
+app.listen(PORT, '0.0.0.0',() => {
+  console.log(`Server is running on http://your_ip_address:your_port`);
+});
+
+```
+.
+├── public
+│   ├── chat.html                        
+│   ├── css                              
+│   ├── js 
+│       ├──config.js.      // place your ip adress here too
 ---
 
 ## ⚙️ Features
@@ -147,7 +161,7 @@ The `header_loader.js` script automatically fetches and inserts the contents of 
 
 ## 📄 License
 
-[Specify your license here, e.g., MIT License]
+[@all rights reserved by IIS]
 
 ---
 
